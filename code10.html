@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ExlDash Admin | Automation Engine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0A192F;
+            color: #E4E2E4;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(17, 34, 64, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(143, 144, 151, 0.1);
+        }
+        .active-glow {
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #233554;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#2b1701",
+                        "on-secondary": "#20304f",
+                        "surface-container-high": "#2a2a2c",
+                        "tertiary": "#e7bf99",
+                        "on-surface-variant": "#c5c6cd",
+                        "primary": "#b9c7e4",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#b9c7e4",
+                        "secondary": "#b6c6ed",
+                        "tertiary-container": "#281400",
+                        "on-surface": "#e4e2e4",
+                        "surface-container-highest": "#343536",
+                        "primary-fixed": "#d6e3ff",
+                        "surface-bright": "#39393b",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#e4e2e4",
+                        "primary-container": "#0a192f",
+                        "on-primary": "#233148",
+                        "surface-dim": "#131315",
+                        "background": "#131315",
+                        "on-secondary-fixed": "#091b39",
+                        "surface-variant": "#343536",
+                        "secondary-fixed": "#d8e2ff",
+                        "on-secondary-container": "#a5b5db",
+                        "inverse-primary": "#515f78",
+                        "on-primary-fixed": "#0d1c32",
+                        "on-primary-container": "#74829d",
+                        "on-secondary-fixed-variant": "#374767",
+                        "surface-container-low": "#1b1b1d",
+                        "surface-container-lowest": "#0e0e10",
+                        "secondary-fixed-dim": "#b6c6ed",
+                        "outline": "#8f9097",
+                        "surface": "#131315",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-tertiary": "#432b10",
+                        "surface-tint": "#b9c7e4",
+                        "surface-container": "#1f1f21",
+                        "inverse-on-surface": "#303032",
+                        "on-primary-fixed-variant": "#39475f",
+                        "on-error": "#690005",
+                        "on-tertiary-container": "#9d7b5a",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed-variant": "#5d4124",
+                        "tertiary-fixed-dim": "#e7bf99",
+                        "outline-variant": "#44474d",
+                        "secondary-container": "#374767",
+                        "on-background": "#e4e2e4",
+                        "accent-blue": "#64FFDA",
+                        "accent-orange": "#FF8C00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "lg": "40px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "margin": "32px",
+                        "md": "24px",
+                        "xl": "64px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "data-table": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="dark bg-background text-on-surface selection:bg-accent-blue/30 overflow-hidden">
+<!-- Auth Layer (Conditional Hidden via JS) -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center bg-background" id="auth-screen">
+<div class="relative z-10 w-full max-w-md p-8 glass-panel rounded-xl shadow-2xl border border-outline-variant/30">
+<div class="text-center mb-8">
+<h1 class="font-display-lg text-headline-lg text-primary tracking-tighter mb-2">ExlDash</h1>
+<p class="font-body-md text-on-surface-variant">Secure Administrator Access</p>
+</div>
+<form class="space-y-6" id="login-form" onsubmit="event.preventDefault(); document.getElementById('auth-screen').style.display='none'; document.getElementById('admin-layout').classList.remove('hidden');">
+<div>
+<label class="block font-label-sm text-on-surface-variant mb-2">OPERATOR ID</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:ring-2 focus:ring-accent-blue/50 focus:border-accent-blue transition-all" placeholder="Enter ID" required="" type="text"/>
+</div>
+<div>
+<label class="block font-label-sm text-on-surface-variant mb-2">ACCESS KEY</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:ring-2 focus:ring-accent-blue/50 focus:border-accent-blue transition-all" placeholder="••••••••" required="" type="password"/>
+</div>
+<button class="w-full bg-primary text-on-primary font-title-md py-4 rounded-lg hover:bg-primary-fixed transition-transform active:scale-95 shadow-lg shadow-primary/10" type="submit">
+                    Authorize Session
+                </button>
+<div class="flex justify-between items-center text-xs font-label-sm text-on-surface-variant mt-4">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-accent-blue animate-pulse"></span> SYSTEM SECURE</span>
+<a class="hover:text-primary" href="#">RECOVERY PATH</a>
+</div>
+</form>
+</div>
+</div>
+<!-- Main Admin Layout -->
+<div class="hidden flex h-screen overflow-hidden" id="admin-layout">
+<!-- SideNavBar (Shared Component JSON) -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/20 bg-surface-container-low/60 backdrop-blur-2xl shadow-xl flex flex-col p-4 z-50">
+<div class="mb-10 px-2">
+<h2 class="font-display-lg text-display-lg text-primary tracking-tighter leading-none">ExlDash</h2>
+<p class="font-label-sm text-[10px] tracking-widest text-on-surface-variant mt-1">AUTOMATION ENGINE</p>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto custom-scrollbar">
+<!-- Dashboard Active -->
+<div class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg border border-primary/30 shadow-[0_0_15px_rgba(100,255,218,0.1)] cursor-pointer active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-title-md text-title-md">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all duration-200 cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="settings_automate">settings_remote</span>
+<span class="font-title-md text-title-md">Automation</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all duration-200 cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-title-md text-title-md">Reports</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all duration-200 cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="card_membership">card_membership</span>
+<span class="font-title-md text-title-md">Membership</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all duration-200 cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="font-title-md text-title-md">Admin Panel</span>
+</div>
+</nav>
+<div class="mt-auto pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-variant/30 transition-colors cursor-pointer">
+<img class="w-10 h-10 rounded-full border border-outline-variant/30" data-alt="A professional headshot of a technical system administrator, featuring sharp focus, dramatic high-contrast lighting from a single side, and a clean dark background. The subject wears modern corporate attire, and the overall color profile follows a deep navy and electric teal aesthetic, conveying authority and technical precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFHPizfulNluvRIaYEt3PJScR35Ewpdp-0508BN9NwoZHja7FxQh79-jLMsCq9_BTjQMSZUVEVqT-GRjvxmQU_1l1WqN5_voBke925vYea821sSiGSLnQLchV75zzxjXIbbGt6aBPgFkFdbGbHBof7y6_PKHguId-cxg200aheyN5Kq3BirisLaxBZsIvsnFmVPxke2Yys4s-6pRFgLVCd7BzdES-hATfpwR8O2TC551D581oJqIdJ3LIP8RpIXt_NFWWeVPz8fRc"/>
+<div class="overflow-hidden">
+<p class="font-title-md text-sm truncate">Alex Rivera</p>
+<p class="font-label-sm text-[10px] text-on-surface-variant uppercase">Senior Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 overflow-y-auto bg-background custom-scrollbar">
+<!-- TopNavBar (Shared Component JSON) -->
+<header class="fixed top-0 right-0 left-64 h-16 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant/20 flex justify-between items-center px-gutter">
+<div class="flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/10 w-96">
+<span class="material-symbols-outlined text-on-surface-variant mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-full" placeholder="Search operations, users, or logs..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-4 py-2 text-primary hover:bg-surface-variant/50 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="upload_file">upload_file</span>
+<span class="font-title-md text-sm">Upload File</span>
+</button>
+<button class="relative p-2 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-accent-orange rounded-full"></span>
+</button>
+<button class="bg-primary/10 text-primary border border-primary/20 px-4 py-2 rounded-lg font-title-md text-sm hover:bg-primary/20 transition-all">
+                        Export Data
+                    </button>
+</div>
+</header>
+<div class="mt-16 p-margin space-y-gutter">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-4">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">All Control Center</h1>
+<p class="text-on-surface-variant font-body-md">Real-time oversight of the ExlDash processing ecosystem.</p>
+</div>
+<div class="flex gap-2">
+<span class="bg-on-secondary-container/10 text-on-secondary-container border border-on-secondary-container/20 px-3 py-1 rounded text-xs font-label-sm">Uptime: 99.98%</span>
+<span class="bg-accent-blue/10 text-accent-blue border border-accent-blue/20 px-3 py-1 rounded text-xs font-label-sm">API: STABLE</span>
+</div>
+</div>
+<!-- Bento Grid Dashboard -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Analytics Summary -->
+<div class="col-span-12 lg:col-span-8 glass-panel p-md rounded-xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-[120px]" data-icon="monitoring">monitoring</span>
+</div>
+<div class="relative z-10">
+<h3 class="font-title-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-blue" data-icon="data_exploration">data_exploration</span>
+                                Processing Analytics
+                            </h3>
+<div class="grid grid-cols-3 gap-4 mb-8">
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<p class="font-label-sm text-[10px] text-on-surface-variant mb-1">TOTAL FILES</p>
+<p class="text-3xl font-bold text-accent-blue tracking-tighter">1.28M</p>
+<p class="text-[10px] text-green-400 mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span> +12% vs last month
+                                    </p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<p class="font-label-sm text-[10px] text-on-surface-variant mb-1">PROCESSING TIME (AVG)</p>
+<p class="text-3xl font-bold text-on-surface tracking-tighter">420ms</p>
+<p class="text-[10px] text-on-surface-variant mt-1">Optimization: Optimal</p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<p class="font-label-sm text-[10px] text-on-surface-variant mb-1">ERRORS DETECTED</p>
+<p class="text-3xl font-bold text-accent-orange tracking-tighter">0.04%</p>
+<p class="text-[10px] text-on-surface-variant mt-1">Within safety margins</p>
+</div>
+</div>
+<div class="h-48 w-full bg-surface-container-highest/20 rounded-lg flex items-center justify-center border border-dashed border-outline-variant/20">
+</div>
+</div>
+</div>
+<!-- User Management Quick Look -->
+<div class="col-span-12 lg:col-span-4 glass-panel p-md rounded-xl">
+<h3 class="font-title-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-blue" data-icon="group">group</span>
+                            User Management
+                        </h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg hover:active-glow transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<div>
+<p class="text-sm font-semibold">Total Users</p>
+<p class="text-xs text-on-surface-variant">42,891 active</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg hover:active-glow transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-accent-orange/10 flex items-center justify-center text-accent-orange">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+</div>
+<div>
+<p class="text-sm font-semibold">Pending Verifications</p>
+<p class="text-xs text-on-surface-variant">128 users waiting</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="pt-4 mt-2 border-t border-outline-variant/10">
+<p class="text-[11px] font-label-sm text-on-surface-variant mb-2">RECENT ACTIVITY</p>
+<div class="space-y-2">
+<div class="text-[10px] flex justify-between">
+<span>User #9982 upgraded to PRO</span>
+<span class="text-on-surface-variant">2m ago</span>
+</div>
+<div class="text-[10px] flex justify-between">
+<span>New registration: mark_dev</span>
+<span class="text-on-surface-variant">14m ago</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Membership & Payments -->
+<div class="col-span-12 md:col-span-6 lg:col-span-4 glass-panel p-md rounded-xl">
+<h3 class="font-title-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-blue" data-icon="account_balance">account_balance</span>
+                            Banking &amp; Payments
+                        </h3>
+<div class="bg-gradient-to-br from-[#1E293B] to-[#0F172A] p-5 rounded-xl border border-outline-variant/30 mb-6 shadow-lg">
+<div class="flex justify-between items-start mb-10">
+<span class="material-symbols-outlined text-accent-blue scale-125" data-icon="contactless">contactless</span>
+<span class="font-label-sm text-[10px] opacity-60">ADMIN OPERATIONS</span>
+</div>
+<p class="font-label-sm text-lg tracking-[0.2em] mb-4">**** **** **** 8820</p>
+<div class="flex justify-between items-end">
+<div>
+<p class="text-[9px] font-label-sm text-on-surface-variant uppercase">Current Pool</p>
+<p class="text-xl font-bold">$124,500.28</p>
+</div>
+<div class="flex gap-2">
+<div class="w-8 h-5 bg-white/10 rounded"></div>
+<div class="w-8 h-5 bg-white/20 rounded"></div>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<button class="w-full flex items-center justify-between p-3 rounded-lg border border-outline-variant/20 hover:bg-surface-variant/20 transition-all text-sm">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-xs" data-icon="settings">settings</span> Payout Settings</span>
+<span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span>
+</button>
+<div class="flex items-center gap-4 justify-center py-2 opacity-60 grayscale hover:grayscale-0 transition-all">
+<div class="w-12 h-8 bg-white/5 rounded flex items-center justify-center p-1">
+<img alt="PayPal" class="max-h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3MiYm4AJ5d-VxxPdvInAMzzgty5LrQSV4douwpYrw7vuQEBkVMQadBUsdLj0m9NbgRYQ-D0xfoHz2ANHkE6FFsSGz0Dw9E4hnzhPod6TBr-J8plZCE8YdPZYZ23oDAWVGVorSX5_bYOjQlxO12iwGDUjRq92O1-qxc3AQHpFolZBzdrhSMps2KYNyYxgcF-Kw9r56BsM3ag_S0BnqafdUZqCxzErHV5aPIFiaZWUS1gWX8S1IbtSYlAXAp-klyP1Nj0-kSx6q_x0"/>
+</div>
+<div class="w-12 h-8 bg-white/5 rounded flex items-center justify-center p-1">
+<img alt="Visa" class="max-h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSbvmqQC7-zeG5fUoIu7AyqXffQeMPF7FJPaLl9QCdBoAHLJuNmo9l75x4sxm4IqTBTGmNgOI5rNLdyoKgkIp22Cia3ZJCsxiIY5Rz3vUD6RtH1PMMU7DYaDcYYPXvslBuKIskePPxQATl9ox6wicO-eIpVZfjnj64oezlUNy2HbKWwZ4dS-JuB-fmCfLYiFBoo_gFERmSkLeJtF3cRUkKiGrN2oHgXknm__ndEqVc6Hkflv4Ugyb-dz3VajpPtXn41kj7JGchKAg"/>
+</div>
+<div class="w-12 h-8 bg-white/5 rounded flex items-center justify-center p-1">
+<img alt="Mastercard" class="max-h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvgVhi0ffeNThgZdELPNefFXS4aK8tdMzu0DfVhkohekfSnExDW1nTr_E4YBSfB45og7OdI3WKSSe2JslpZIousUa8ZZ0VQIfJZY2XugDbWTOAqeTuu6u59IwAovlpZfeGA7fFVzfyQvlck-h5S21tAlLcbu061VANcTjeMRBTteK7Py9zLs6fqHed3tXZIwYNLhNlaAvWXSVzEtU6jbJ8NgtWKPzw0v-LGwBt9olhlbl9aQpm9j4_6Znx5rUKnP4RR-Ija7_j9hA"/>
+</div>
+</div>
+</div>
+</div>
+<!-- AdSense Management (HTML Editor) -->
+<div class="col-span-12 md:col-span-6 lg:col-span-8 glass-panel p-md rounded-xl">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-blue" data-icon="ads_click">ads_click</span>
+                                AdSense Management
+                            </h3>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-surface-container-high rounded border border-outline-variant/30 text-xs hover:bg-surface-container-highest transition-colors">Clear Cache</button>
+<button class="px-3 py-1 bg-accent-blue/20 text-accent-blue rounded border border-accent-blue/30 text-xs hover:bg-accent-blue/30 transition-colors">Apply HTML</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="space-y-4">
+<div>
+<label class="block font-label-sm text-[10px] text-on-surface-variant mb-2">BANNER LOCATION: SIDEBAR_TOP</label>
+<div class="font-label-sm text-[12px] bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/20 h-48 overflow-y-auto custom-scrollbar font-mono text-secondary">
+<span class="text-accent-orange">&lt;!-- ExlDash Global Ad Slot --&gt;</span><br/>
+                                        &lt;<span class="text-primary">script</span> <span class="text-tertiary">async</span> <span class="text-tertiary">src</span>=<span class="text-accent-blue">"https://pagead2.googlesyndication.com/adsbygoogle.js"</span>&gt;&lt;/<span class="text-primary">script</span>&gt;<br/>
+                                        &lt;<span class="text-primary">ins</span> <span class="text-tertiary">class</span>=<span class="text-accent-blue">"adsbygoogle"</span><br/>
+                                             <span class="text-tertiary">style</span>=<span class="text-accent-blue">"display:block"</span><br/>
+                                             <span class="text-tertiary">data-ad-client</span>=<span class="text-accent-blue">"ca-pub-123456789"</span><br/>
+                                             <span class="text-tertiary">data-ad-slot</span>=<span class="text-accent-blue">"987654321"</span><br/>
+                                             <span class="text-tertiary">data-ad-format</span>=<span class="text-accent-blue">"auto"</span>&gt;&lt;/<span class="text-primary">ins</span>&gt;
+                                    </div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant/10 h-full flex flex-col">
+<p class="font-label-sm text-[10px] text-on-surface-variant mb-4 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500"></span> LIVE PREVIEW
+                                    </p>
+<div class="flex-1 bg-surface-container-highest/20 rounded-md border border-dashed border-outline-variant/20 flex items-center justify-center group overflow-hidden relative">
+<div class="text-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-on-surface-variant opacity-20 text-4xl" data-icon="image">image</span>
+<p class="text-[10px] text-on-surface-variant mt-2">728 x 90 Banner Responsive</p>
+</div>
+<div class="absolute top-2 right-2 px-2 py-0.5 bg-black/50 text-[8px] rounded uppercase font-bold tracking-tighter">Sponsored</div>
+</div>
+<div class="mt-4 grid grid-cols-2 gap-2">
+<div class="bg-surface-container-lowest p-2 rounded">
+<p class="text-[9px] text-on-surface-variant">RPM</p>
+<p class="text-sm font-bold">$12.45</p>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded">
+<p class="text-[9px] text-on-surface-variant">Impressions</p>
+<p class="text-sm font-bold">48.2k</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="col-span-12 glass-panel p-md rounded-xl">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-blue">settings_applications</span>
+            Ad Placement Settings
+        </h3>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold text-sm hover:bg-primary-fixed transition-all shadow-lg shadow-primary/10">
+            Save Configuration
+        </button>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 space-y-4">
+<label class="block font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider">Global AdSense Script / HTML Code</label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-lg p-4 text-on-surface font-mono text-sm focus:outline-none focus:ring-2 focus:ring-accent-blue/50 focus:border-accent-blue transition-all h-48 custom-scrollbar" placeholder="Paste your &lt;script&gt; or &lt;ins&gt; tags here..."></textarea>
+</div>
+<div class="space-y-4">
+<p class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider mb-2">Active Placements</p>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant/10">
+<span class="text-sm">Header Banner</span>
+<button class="w-10 h-5 bg-accent-blue rounded-full relative transition-colors">
+<span class="absolute right-1 top-1 w-3 h-3 bg-white rounded-full"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant/10">
+<span class="text-sm">Sidebar Widget</span>
+<button class="w-10 h-5 bg-accent-blue rounded-full relative transition-colors">
+<span class="absolute right-1 top-1 w-3 h-3 bg-white rounded-full"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant/10">
+<span class="text-sm">Footer Sticky</span>
+<button class="w-10 h-5 bg-surface-container-highest rounded-full relative transition-colors">
+<span class="absolute left-1 top-1 w-3 h-3 bg-on-surface-variant rounded-full"></span>
+</button>
+</div>
+</div>
+<div class="mt-4 p-3 bg-accent-blue/5 border border-accent-blue/20 rounded-lg">
+<p class="text-[10px] text-accent-blue flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">info</span>
+                    Changes take up to 5 minutes to propagate.
+                </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Membership Tiers (Shared Components Logic) -->
+<div class="col-span-12 glass-panel p-md rounded-xl">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-blue" data-icon="loyalty">loyalty</span>
+                                Subscription Tiers
+                            </h3>
+<button class="bg-accent-blue text-on-primary-fixed px-6 py-2 rounded-lg font-bold text-sm hover:brightness-110 transition-all">New Tier +</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Free Tier -->
+<div class="p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/10 relative">
+<h4 class="font-title-md text-on-surface-variant mb-2">Essential</h4>
+<p class="text-2xl font-bold mb-6">$0 <span class="text-xs font-normal opacity-50">/ month</span></p>
+<ul class="space-y-3 mb-8 text-sm text-on-surface-variant">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs text-green-500" data-icon="check">check</span> 100 Files / Day</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs text-green-500" data-icon="check">check</span> Basic Automation</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs opacity-30" data-icon="close">close</span> Custom API Access</li>
+</ul>
+<button class="w-full py-2 border border-outline-variant/30 rounded-lg hover:bg-surface-variant/20 transition-all">Manage Tier</button>
+</div>
+<!-- Premium Tier (Glow) -->
+<div class="p-6 glass-panel rounded-xl active-glow relative">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent-blue text-on-primary-fixed px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Most Popular</div>
+<h4 class="font-title-md text-accent-blue mb-2">Professional</h4>
+<p class="text-2xl font-bold mb-6">$49 <span class="text-xs font-normal opacity-50">/ month</span></p>
+<ul class="space-y-3 mb-8 text-sm">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs text-accent-blue" data-icon="check">check</span> 5,000 Files / Day</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs text-accent-blue" data-icon="check">check</span> Priority Processing</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs text-accent-blue" data-icon="check">check</span> Full API Suite</li>
+</ul>
+<button class="w-full py-2 bg-accent-blue text-on-primary-fixed rounded-lg font-bold hover:brightness-110 transition-all shadow-lg shadow-accent-blue/20">Edit Features</button>
+</div>
+<!-- Enterprise Tier -->
+<div class="p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/10 relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+</div>
+<h4 class="font-title-md text-tertiary mb-2">Enterprise</h4>
+<p class="text-2xl font-bold mb-6">Custom <span class="text-xs font-normal opacity-50">/ quote</span></p>
+<ul class="space-y-3 mb-8 text-sm text-on-surface-variant">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs text-tertiary" data-icon="check">check</span> Unlimited Scale</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs text-tertiary" data-icon="check">check</span> Dedicated Server</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-xs text-tertiary" data-icon="check">check</span> 24/7 Hotline</li>
+</ul>
+<button class="w-full py-2 border border-tertiary/30 text-tertiary rounded-lg hover:bg-tertiary/10 transition-all">Review Contracts</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer (Shared Component JSON) -->
+<footer class="w-full py-8 mt-auto border-t border-outline-variant/10 bg-surface-container-lowest">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin max-w-7xl mx-auto gap-4">
+<div class="flex items-center gap-4">
+<span class="font-title-md text-title-md text-on-surface">ExlDash</span>
+<span class="text-on-surface-variant/30">|</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 ExlDash Automation. All rights reserved.</p>
+</div>
+<div class="flex gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">About</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</div>
+</main>
+</div>
+<!-- Micro-interactions Script -->
+<script>
+        // Subtle Mouse Follow effect for cards
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Toggle Password Visibility (Simulated for this demo)
+        const passwordField = document.querySelector('input[type="password"]');
+        if (passwordField) {
+            passwordField.addEventListener('focus', () => {
+                passwordField.parentElement.classList.add('active-glow');
+            });
+            passwordField.addEventListener('blur', () => {
+                passwordField.parentElement.classList.remove('active-glow');
+            });
+        }
+    </script>
+</body></html>

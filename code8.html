@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bank Account Settings | ExlDash</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#233148",
+                        "on-error": "#690005",
+                        "surface-bright": "#39393b",
+                        "inverse-primary": "#515f78",
+                        "on-error-container": "#ffdad6",
+                        "tertiary": "#e7bf99",
+                        "primary": "#b9c7e4",
+                        "on-background": "#e4e2e4",
+                        "error": "#ffb4ab",
+                        "background": "#131315",
+                        "outline": "#8f9097",
+                        "inverse-surface": "#e4e2e4",
+                        "surface": "#131315",
+                        "on-secondary-fixed-variant": "#374767",
+                        "on-secondary": "#20304f",
+                        "error-container": "#93000a",
+                        "surface-dim": "#131315",
+                        "secondary-fixed-dim": "#b6c6ed",
+                        "surface-container": "#1f1f21",
+                        "secondary-fixed": "#d8e2ff",
+                        "secondary": "#b6c6ed",
+                        "outline-variant": "#44474d",
+                        "primary-fixed": "#d6e3ff",
+                        "inverse-on-surface": "#303032",
+                        "surface-container-lowest": "#0e0e10",
+                        "primary-container": "#0a192f",
+                        "on-tertiary-fixed-variant": "#5d4124",
+                        "surface-container-high": "#2a2a2c",
+                        "secondary-container": "#374767",
+                        "surface-container-low": "#1b1b1d",
+                        "primary-fixed-dim": "#b9c7e4",
+                        "on-secondary-fixed": "#091b39",
+                        "on-primary-fixed": "#0d1c32",
+                        "tertiary-fixed-dim": "#e7bf99",
+                        "tertiary-container": "#281400",
+                        "surface-tint": "#b9c7e4",
+                        "on-primary-container": "#74829d",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-tertiary-container": "#9d7b5a",
+                        "on-primary-fixed-variant": "#39475f",
+                        "surface-variant": "#343536",
+                        "on-tertiary-fixed": "#2b1701",
+                        "on-secondary-container": "#a5b5db",
+                        "on-tertiary": "#432b10",
+                        "surface-container-highest": "#343536",
+                        "on-surface": "#e4e2e4",
+                        "on-surface-variant": "#c5c6cd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "md": "24px",
+                        "margin": "32px",
+                        "lg": "40px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "xl": "64px",
+                        "sm": "12px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["JetBrains Mono"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #131315;
+            color: #e4e2e4;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-card {
+            background: rgba(17, 34, 64, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(143, 144, 151, 0.1);
+        }
+        .active-glow {
+            border: 1px solid #64FFDA;
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.15);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pulse-live {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar (from JSON authority) -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/20 bg-surface-container dark:bg-surface-container-low/60 backdrop-blur-xl z-50 flex flex-col p-4">
+<div class="mb-8 px-4">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tighter">ExlDash</h1>
+<p class="font-title-md text-title-md text-on-surface-variant opacity-60">Automation Engine</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-title-md text-title-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">settings_remote</span>
+<span class="font-title-md text-title-md">Automation</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-title-md text-title-md">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-colors hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">card_membership</span>
+<span class="font-title-md text-title-md">Membership</span>
+</a>
+<!-- Active Tab: Admin Panel (Contextual Mapping) -->
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg border border-primary/30 shadow-[0_0_15px_rgba(100,255,218,0.1)] cursor-pointer active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span class="font-title-md text-title-md">Admin Panel</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant/10">
+<button class="w-full py-3 px-4 bg-primary text-on-primary font-title-md text-title-md rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity active:scale-95">
+<span class="material-symbols-outlined">upload_file</span>
+                Upload File
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 min-h-screen pb-margin">
+<!-- TopNavBar (from JSON authority) -->
+<header class="fixed top-0 right-0 left-64 h-16 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant/20 flex justify-between items-center px-gutter">
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">search</span>
+<input class="bg-surface-container-high border-none rounded-full pl-10 pr-4 py-1.5 text-body-md focus:ring-1 focus:ring-primary w-64 transition-all" placeholder="Quick Search Settings..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-primary font-bold border-b-2 border-primary pb-1 transition-all">Settings</button>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-variant/50 p-2 rounded-full cursor-pointer transition-all">notifications</span>
+<button class="bg-secondary-container text-on-secondary-container px-4 py-1.5 rounded-lg font-body-md hover:bg-opacity-80 transition-all">Export Data</button>
+<img alt="User Avatar" class="w-8 h-8 rounded-full border border-primary/20" data-alt="A professional headshot of a senior software engineer with a neutral expression, wearing a dark navy blazer. The lighting is crisp and studio-quality with a soft bokeh background that hints at a high-tech office environment. The overall aesthetic is clean, minimalist, and authoritative, matching a premium technical dashboard style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_MnkSi61RK3h9uUqhUDrDTLh8-GqatqYnzS6p3uV1sKWsNhnb4A4TBlWWGrASPAzI83UjNHiaO6LRLAldLlHyDikl7_wpGkRe4tjmHt3j8B46CwUDNPcuZ1jLKeVbQrJzup4uVwt5eFfOWp93d19BYXZ6uLH1gUjx0gWXiV4kK9fQSLRIuFtDT8dkl13n8G6yETT6W6W6VM8ZiMcYyDJgoSSass9RfhnTPRFjs8e9BCu4BR2Z7m4baXSar8tzWiOsSXhxKBR3QP8"/>
+</div>
+</div>
+</header>
+<!-- Page Header -->
+<section class="mt-24 px-margin max-w-6xl mx-auto">
+<div class="flex justify-between items-end mb-10">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Bank Account Settings</h2>
+<p class="text-on-surface-variant font-body-md">Configure global payout methods and gateway credentials for automation routing.</p>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm text-primary">ACCOUNT VERIFIED</span>
+</div>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Section 1: Bank Transfer Details (Bento Large) -->
+<div class="col-span-12 lg:col-span-7 glass-card p-md rounded-xl space-y-6">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary">account_balance</span>
+<h3 class="font-title-md text-title-md">Bank Transfer Details</h3>
+</div>
+<div class="grid grid-cols-2 gap-gutter">
+<div class="col-span-2 md:col-span-1">
+<label class="block font-label-sm text-label-sm text-outline mb-2">ACCOUNT HOLDER NAME</label>
+<input class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg p-3 text-body-md focus:border-primary focus:ring-0 transition-colors" type="text" value="EXLDASH TECHNOLOGIES LLC"/>
+</div>
+<div class="col-span-2 md:col-span-1">
+<label class="block font-label-sm text-label-sm text-outline mb-2">BANK NAME</label>
+<input class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg p-3 text-body-md focus:border-primary focus:ring-0 transition-colors" type="text" value="GLOBAL APEX BANK"/>
+</div>
+<div class="col-span-2 md:col-span-1">
+<label class="block font-label-sm text-label-sm text-outline mb-2">ACCOUNT NUMBER</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg p-3 text-body-md focus:border-primary focus:ring-0 transition-colors pr-10" type="password" value="882910029334"/>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline cursor-pointer hover:text-on-surface">visibility</span>
+</div>
+</div>
+<div class="col-span-2 md:col-span-1">
+<label class="block font-label-sm text-label-sm text-outline mb-2">IFSC / SWIFT CODE</label>
+<input class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg p-3 text-body-md focus:border-primary focus:ring-0 transition-colors uppercase" type="text" value="GABCUS33XXX"/>
+</div>
+</div>
+<div class="mt-4 p-4 bg-primary-container/50 border border-primary/20 rounded-lg flex gap-3">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="font-body-md text-on-primary-container text-sm">Direct bank transfers are processed via encrypted SEPA/SWIFT channels. Payout cycles occur every Friday.</p>
+</div>
+</div>
+<!-- Section 2: UPI Configuration (Bento Side) -->
+<div class="col-span-12 lg:col-span-5 glass-card p-md rounded-xl">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">qr_code_2</span>
+<h3 class="font-title-md text-title-md">UPI Configuration</h3>
+</div>
+<button class="text-primary hover:underline font-label-sm text-label-sm">+ ADD NEW</button>
+</div>
+<div class="space-y-4">
+<!-- UPI Item 1 -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg border border-outline-variant/20 hover:border-primary/40 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-white rounded flex items-center justify-center p-1">
+<img alt="GPay" class="w-full" data-alt="The official Google Pay logo in high definition, featuring its signature multi-colored G letter. The logo is centered on a clean, solid white background within a small rounded rectangle container, representing a payment integration button in a sophisticated fintech application. The design is sharp and vector-like, ensuring maximum legibility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlU20vyLS4LE7ZwzRRefQSQiSPwse6kcrstlt3pKuqopXhrmXzi5hR-7rua98MPLwUJyUO6PDlByiRwXkI5M-DX9eIA7V8214JLiDhKgWMeLhHldCziMBRdP2DLiKDgxHqLLZ53Ym0Uenwaqgyz0n496k_L3pN8dx5kNvELRx8OalPOGRYg1Wxyt479zt4-LQ-keQ5tZc1aQUWFl_G6z2XH_YtOIUvulXnT_zMCpoLAWNqtBsK3WzhIIM-5nAjIL3g2g3yg1TB4IU"/>
+</div>
+<div>
+<p class="font-body-md text-on-surface">exldash.corp@okgoogle</p>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 bg-[#64FFDA] rounded-full pulse-live"></span>
+<span class="font-label-sm text-label-sm text-[#64FFDA]">ACTIVE</span>
+</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline hover:text-error cursor-pointer">delete</span>
+</div>
+<!-- UPI Item 2 -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg border border-outline-variant/20 opacity-60">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-white rounded flex items-center justify-center p-1">
+<img alt="PhonePe" class="w-full" data-alt="The official PhonePe logo in vibrant purple, showcased within a white rounded square container. The logo is crisp and modern, fitting seamlessly into a professional financial settings interface. The lighting is flat and clear, emphasizing the brand's corporate identity within a dark-mode dashboard ecosystem." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs37sipp613ZVrnfaEZ7Ie80tHfq6KNeFGGLSiq4CJa-K0Rp89mGCKtfRyekGSCcuTMDZiC63u0TlGjOshpLZ0e6piIFlW-E8s4kvBQ_Mp8qHbQ_eQFElIhM_mhvfnIe274D5k-zjgjy8eFm-1tNmlwpD3WnS5WcYwA1WWbnYK_B2RhP6K67LU-AW0rlkFy-bFhulsaz0jM7Zn892jHC1bSYwUnaC2Ioj4Y2G3ydTQq7TvqlxKh7VUohpedMOYRpHHvIR_4XwYIy8"/>
+</div>
+<div>
+<p class="font-body-md text-on-surface">9988776655@ybl</p>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 bg-outline rounded-full"></span>
+<span class="font-label-sm text-label-sm text-outline">INACTIVE</span>
+</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline hover:text-primary cursor-pointer">toggle_off</span>
+</div>
+</div>
+</div>
+<!-- Section 3: International Gateways -->
+<div class="col-span-12 glass-card p-md rounded-xl">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">public</span>
+<h3 class="font-title-md text-title-md">International Gateways</h3>
+</div>
+<div class="flex flex-col md:flex-row gap-10 items-start">
+<div class="flex-1 w-full space-y-6">
+<div class="flex items-center justify-between p-4 bg-surface-container-high/50 rounded-xl border border-primary/20 active-glow">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center p-2">
+<img alt="PayPal" class="w-full" data-alt="The PayPal logo with its iconic blue double-P monogram, presented clearly on a stark white background within a professional card UI element. The style is clean, corporate, and minimalist, designed to be instantly recognizable within a global payment configuration screen of an enterprise-grade web application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzGzJTxJx-viUJFoxh4AGF7VPzW6aKMVzUinNNMnoXdLBx2GYZoyywDoGaiiLXvPrMokRx1pbqrdGjz7czaNVgNUnqCXUtXIir7lrTT2UJptgiab_U20MxeDnOnhMFhNBfKEuZZpb37MquMxz3ZH67NJhFLjVFnZ_DZ0sdqetAOCd1bR0fh6OlCLsBX48FwU554627lYOTPbYuzRX0nx8sXqLEpFDEfGDzo2ogpYkJFu9ungvYSke9_2L2XLz-HYFjG5vtxVZKj4E"/>
+</div>
+<div>
+<h4 class="font-body-md font-bold text-on-surface">PayPal Integration</h4>
+<p class="text-sm text-on-surface-variant">Enabled for international USD/EUR settlements</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-label-sm text-label-sm text-primary">CONNECTED</span>
+<div class="w-12 h-6 bg-primary rounded-full relative cursor-pointer">
+<div class="absolute right-1 top-1 w-4 h-4 bg-on-primary rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block font-label-sm text-label-sm text-outline">PAYPAL BUSINESS EMAIL</label>
+<div class="flex gap-4">
+<input class="flex-1 bg-surface-container-low border border-outline-variant/30 rounded-lg p-3 text-body-md focus:border-primary focus:ring-0" type="email" value="billing-ops@exldash.com"/>
+<button class="px-6 py-3 border border-primary text-primary rounded-lg font-title-md text-title-md hover:bg-primary/10 transition-colors">Verify Email</button>
+</div>
+</div>
+</div>
+<div class="w-full md:w-80 p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">shield</span>
+<h4 class="font-label-sm text-label-sm text-tertiary">SECURITY PROTOCOL</h4>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                                All financial data is AES-256 encrypted at rest. ExlDash never stores full primary account numbers (PAN) on local servers.
+                            </p>
+<div class="mt-6 flex items-center justify-between">
+<span class="text-xs text-outline font-label-sm">ENCRYPTION KEY</span>
+<span class="text-xs font-mono text-primary">RSA-4096-PRO</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Global Actions -->
+<div class="mt-10 flex items-center justify-between border-t border-outline-variant/20 pt-8">
+<div class="flex items-center gap-2 text-outline">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="text-sm font-body-md">Last updated: 14 Oct 2024, 09:22 AM</span>
+</div>
+<div class="flex gap-4">
+<button class="px-8 py-3 bg-surface-variant text-on-surface rounded-lg font-title-md text-title-md flex items-center gap-2 hover:bg-surface-bright transition-all active:scale-95">
+<span class="material-symbols-outlined">sync</span>
+                        Test Connection
+                    </button>
+<button class="px-10 py-3 bg-primary text-on-primary rounded-lg font-title-md text-title-md shadow-[0_0_20px_rgba(185,199,228,0.2)] hover:opacity-90 transition-all active:scale-95">
+                        Save Changes
+                    </button>
+</div>
+</div>
+</section>
+<!-- Footer (from JSON authority) -->
+<footer class="w-full py-8 mt-xl border-t border-outline-variant/10 bg-surface-container-lowest">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin max-w-7xl mx-auto">
+<div class="mb-4 md:mb-0">
+<span class="font-title-md text-title-md text-on-surface">ExlDash</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 ExlDash Automation. All rights reserved.</p>
+<div class="flex gap-8 mt-4 md:mt-0">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">About</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</main>
+<!-- Micro-interactions Script -->
+<script>
+        // Toggle visibility for account number
+        document.querySelectorAll('.material-symbols-outlined').forEach(icon => {
+            if (icon.innerText === 'visibility') {
+                icon.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        this.innerText = 'visibility_off';
+                    } else {
+                        input.type = 'password';
+                        this.innerText = 'visibility';
+                    }
+                });
+            }
+        });
+
+        // Simple button active state visual feedback
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 100);
+            });
+        });
+    </script>
+</body></html>

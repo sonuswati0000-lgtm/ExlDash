@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ExlDash Admin | AdSense Engine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0A192F;
+            color: #E4E2E4;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(17, 34, 64, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(143, 144, 151, 0.1);
+        }
+        .active-glow {
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #233554;
+            border-radius: 10px;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #64FFDA;
+        }
+        .toggle-checkbox:checked + .toggle-label .toggle-dot {
+            transform: translateX(100%);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#2b1701",
+                        "on-secondary": "#20304f",
+                        "surface-container-high": "#2a2a2c",
+                        "tertiary": "#e7bf99",
+                        "on-surface-variant": "#c5c6cd",
+                        "primary": "#b9c7e4",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#b9c7e4",
+                        "secondary": "#b6c6ed",
+                        "tertiary-container": "#281400",
+                        "on-surface": "#e4e2e4",
+                        "surface-container-highest": "#343536",
+                        "primary-fixed": "#d6e3ff",
+                        "surface-bright": "#39393b",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#e4e2e4",
+                        "primary-container": "#0a192f",
+                        "on-primary": "#233148",
+                        "surface-dim": "#131315",
+                        "background": "#131315",
+                        "on-secondary-fixed": "#091b39",
+                        "surface-variant": "#343536",
+                        "secondary-fixed": "#d8e2ff",
+                        "on-secondary-container": "#a5b5db",
+                        "inverse-primary": "#515f78",
+                        "on-primary-fixed": "#0d1c32",
+                        "on-primary-container": "#74829d",
+                        "on-secondary-fixed-variant": "#374767",
+                        "surface-container-low": "#1b1b1d",
+                        "surface-container-lowest": "#0e0e10",
+                        "secondary-fixed-dim": "#b6c6ed",
+                        "outline": "#8f9097",
+                        "surface": "#131315",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-tertiary": "#432b10",
+                        "surface-tint": "#b9c7e4",
+                        "surface-container": "#1f1f21",
+                        "inverse-on-surface": "#303032",
+                        "on-primary-fixed-variant": "#39475f",
+                        "on-error": "#690005",
+                        "on-tertiary-container": "#9d7b5a",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed-variant": "#5d4124",
+                        "tertiary-fixed-dim": "#e7bf99",
+                        "outline-variant": "#44474d",
+                        "secondary-container": "#374767",
+                        "on-background": "#e4e2e4",
+                        "accent-blue": "#64FFDA",
+                        "accent-orange": "#FF8C00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "lg": "40px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "margin": "32px",
+                        "md": "24px",
+                        "xl": "64px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "data-table": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="dark bg-background text-on-surface selection:bg-accent-blue/30 overflow-hidden">
+<!-- Auth Layer -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center bg-background" id="auth-screen">
+<div class="relative z-10 w-full max-w-md p-8 glass-panel rounded-xl shadow-2xl border border-outline-variant/30">
+<div class="text-center mb-8">
+<h1 class="font-display-lg text-headline-lg text-primary tracking-tighter mb-2">ExlDash</h1>
+<p class="font-body-md text-on-surface-variant">Secure Administrator Access</p>
+</div>
+<form class="space-y-6" id="login-form" onsubmit="event.preventDefault(); document.getElementById('auth-screen').style.display='none'; document.getElementById('admin-layout').classList.remove('hidden');">
+<div>
+<label class="block font-label-sm text-on-surface-variant mb-2">OPERATOR ID</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:ring-2 focus:ring-accent-blue/50 focus:border-accent-blue transition-all" placeholder="Enter ID" required="" type="text"/>
+</div>
+<div>
+<label class="block font-label-sm text-on-surface-variant mb-2">ACCESS KEY</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:ring-2 focus:ring-accent-blue/50 focus:border-accent-blue transition-all" placeholder="••••••••" required="" type="password"/>
+</div>
+<button class="w-full bg-primary text-on-primary font-title-md py-4 rounded-lg hover:bg-primary-fixed transition-transform active:scale-95 shadow-lg shadow-primary/10" type="submit">
+                Authorize Session
+            </button>
+<div class="flex justify-between items-center text-xs font-label-sm text-on-surface-variant mt-4">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-accent-blue animate-pulse"></span> SYSTEM SECURE</span>
+<a class="hover:text-primary" href="#">RECOVERY PATH</a>
+</div>
+</form>
+</div>
+</div>
+<!-- Main Admin Layout -->
+<div class="hidden flex h-screen overflow-hidden" id="admin-layout">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/20 bg-surface-container-low/60 backdrop-blur-2xl shadow-xl flex flex-col p-4 z-50">
+<div class="mb-10 px-2">
+<h2 class="font-display-lg text-display-lg text-primary tracking-tighter leading-none">ExlDash</h2>
+<p class="font-label-sm text-[10px] tracking-widest text-on-surface-variant mt-1">AUTOMATION ENGINE</p>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto custom-scrollbar">
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all duration-200 cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-title-md text-title-md">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all duration-200 cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="settings_remote">settings_remote</span>
+<span class="font-title-md text-title-md">Automation</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all duration-200 cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-title-md text-title-md">Reports</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg border border-primary/30 shadow-[0_0_15px_rgba(100,255,218,0.1)] cursor-pointer active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="ads_click">ads_click</span>
+<span class="font-title-md text-title-md">Ad Settings</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:translate-x-1 transition-all duration-200 cursor-pointer active:scale-95">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="font-title-md text-title-md">Admin Panel</span>
+</div>
+</nav>
+<div class="mt-auto pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-variant/30 transition-colors cursor-pointer">
+<img class="w-10 h-10 rounded-full border border-outline-variant/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFHPizfulNluvRIaYEt3PJScR35Ewpdp-0508BN9NwoZHja7FxQh79-jLMsCq9_BTjQMSZUVEVqT-GRjvxmQU_1l1WqN5_voBke925vYea821sSiGSLnQLchV75zzxjXIbbGt6aBPgFkFdbGbHBof7y6_PKHguId-cxg200aheyN5Kq3BirisLaxBZsIvsnFmVPxke2Yys4s-6pRFgLVCd7BzdES-hATfpwR8O2TC551D581oJqIdJ3LIP8RpIXt_NFWWeVPz8fRc"/>
+<div class="overflow-hidden">
+<p class="font-title-md text-sm truncate">Alex Rivera</p>
+<p class="font-label-sm text-[10px] text-on-surface-variant uppercase">Senior Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 overflow-y-auto bg-background custom-scrollbar">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-64 h-16 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant/20 flex justify-between items-center px-gutter">
+<div class="flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/10 w-96">
+<span class="material-symbols-outlined text-on-surface-variant mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-full" placeholder="Search operations, users, or logs..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-all">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-accent-orange rounded-full"></span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant/20"></div>
+<div class="text-right">
+<p class="text-xs font-label-sm text-accent-blue">SYSTEM STABLE</p>
+<p class="text-[10px] text-on-surface-variant">Uptime 99.9%</p>
+</div>
+</div>
+</header>
+<div class="mt-16 p-margin space-y-gutter">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">AdSense Configurations</h1>
+<p class="text-on-surface-variant font-body-md">Manage global advertising placements and Google AdSense integration.</p>
+</div>
+<div class="flex flex-col items-end gap-2">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-bold text-sm hover:bg-primary-fixed transition-all shadow-lg shadow-primary/20 flex items-center gap-2" id="save-btn">
+<span class="material-symbols-outlined text-sm">save</span>
+                        Save Ad Configurations
+                    </button>
+<div class="hidden text-accent-blue text-[10px] font-label-sm flex items-center gap-1 animate-pulse" id="success-toast">
+<span class="material-symbols-outlined text-xs">check_circle</span>
+                        Changes synced to processing engine
+                    </div>
+</div>
+</div>
+<!-- Main Configuration Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Settings -->
+<div class="lg:col-span-7 space-y-gutter">
+<!-- HTML Injection Box -->
+<div class="glass-panel p-md rounded-xl space-y-4">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-accent-blue">code</span>
+<h3 class="font-title-md text-on-surface">Google AdSense HTML Code</h3>
+</div>
+<p class="text-xs text-on-surface-variant">Paste your &lt;script&gt; and &lt;ins&gt; tags from your Google AdSense console here. These will be injected globally based on placements enabled below.</p>
+<div class="relative group">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-lg p-5 text-accent-blue font-mono text-sm focus:outline-none focus:ring-2 focus:ring-accent-blue/50 focus:border-accent-blue transition-all h-64 custom-scrollbar leading-relaxed" placeholder="&lt;!-- Paste AdSense Code Here --&gt;"></textarea>
+<div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="bg-surface-container-high text-[10px] px-2 py-1 rounded text-on-surface-variant">CODE MODE</span>
+</div>
+</div>
+</div>
+<!-- Placements Toggle Group -->
+<div class="glass-panel p-md rounded-xl">
+<h3 class="font-title-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-blue">toggle_on</span>
+                            Active Placements
+                        </h3>
+<div class="space-y-4">
+<!-- Sidebar Placement (User Priority) -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low/50 rounded-xl border border-accent-blue/20 active-glow">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-accent-blue/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-accent-blue">side_navigation</span>
+</div>
+<div>
+<p class="font-title-md text-sm">Sidebar Ad Placement</p>
+<p class="text-[10px] text-on-surface-variant">Display ads in the left navigation or secondary side panel</p>
+</div>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in" id="toggle-sidebar" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-container-highest cursor-pointer transition-colors duration-200" for="toggle-sidebar"></label>
+</div>
+</div>
+<!-- Header Placement -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-variant/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">view_stream</span>
+</div>
+<div>
+<p class="font-title-md text-sm">Header Placement</p>
+<p class="text-[10px] text-on-surface-variant">Sticky or static banners at the top of the viewport</p>
+</div>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in" id="toggle-header" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-container-highest cursor-pointer transition-colors duration-200" for="toggle-header"></label>
+</div>
+</div>
+<!-- Footer Placement -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-variant/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">view_headline</span>
+</div>
+<div>
+<p class="font-title-md text-sm">Footer Placement</p>
+<p class="text-[10px] text-on-surface-variant">End-of-page content ads and legal disclosure area</p>
+</div>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in" id="toggle-footer" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-container-highest cursor-pointer transition-colors duration-200" for="toggle-footer"></label>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Live Placement Preview -->
+<div class="lg:col-span-5">
+<div class="glass-panel p-md rounded-xl h-full flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-blue">visibility</span>
+                                Live Placement Preview
+                            </h3>
+<span class="text-[10px] font-label-sm bg-accent-blue/10 text-accent-blue px-2 py-1 rounded">DEVICE: DESKTOP</span>
+</div>
+<!-- Dashboard Mockup -->
+<div class="flex-1 bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-4 relative overflow-hidden">
+<!-- Mock Sidebar -->
+<div class="absolute left-0 top-0 bottom-0 w-12 bg-surface-container-low border-r border-outline-variant/10 flex flex-col items-center py-4 gap-4">
+<div class="w-6 h-6 rounded bg-primary/20"></div>
+<div class="w-6 h-6 rounded bg-outline-variant/20"></div>
+<div class="w-6 h-6 rounded bg-outline-variant/20"></div>
+<div class="w-6 h-6 rounded bg-outline-variant/20"></div>
+</div>
+<!-- Dashboard Content -->
+<div class="ml-12 h-full flex flex-col">
+<div class="h-8 w-full border-b border-outline-variant/10 mb-4 flex items-center px-4">
+<div class="h-2 w-24 bg-outline-variant/20 rounded"></div>
+</div>
+<div class="grid grid-cols-2 gap-4 px-4">
+<div class="h-20 bg-surface-container-high/50 rounded-lg border border-outline-variant/10"></div>
+<div class="h-20 bg-surface-container-high/50 rounded-lg border border-outline-variant/10"></div>
+<div class="h-32 col-span-2 bg-surface-container-high/50 rounded-lg border border-outline-variant/10"></div>
+</div>
+<!-- Highlighted Sidebar Ad Overlay Area -->
+<div class="absolute left-14 top-16 w-32 h-64 bg-accent-blue/5 border-2 border-dashed border-accent-blue rounded-lg flex flex-col items-center justify-center p-4 transition-all duration-300" id="preview-sidebar-ad">
+<span class="material-symbols-outlined text-accent-blue text-3xl mb-2 animate-bounce">ads_click</span>
+<p class="text-[10px] font-bold text-accent-blue text-center uppercase tracking-tighter">Sidebar Ad Slot</p>
+<p class="text-[8px] text-accent-blue/60 text-center mt-1">160 x 600 SkyScraper</p>
+<div class="mt-4 flex gap-1">
+<div class="w-1 h-1 rounded-full bg-accent-blue"></div>
+<div class="w-1 h-1 rounded-full bg-accent-blue"></div>
+<div class="w-1 h-1 rounded-full bg-accent-blue"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-6 p-4 bg-surface-container-low rounded-lg border border-outline-variant/10">
+<p class="text-[10px] text-on-surface-variant leading-relaxed">
+<span class="text-accent-blue font-bold">Optimization Tip:</span> Sidebar placements usually yield 15% higher CTR on widescreen layouts. Ensure your AdSense script includes "Responsive" formats for the best fill rate across various side panel widths.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full py-8 mt-auto border-t border-outline-variant/10 bg-surface-container-lowest">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin max-w-7xl mx-auto gap-4">
+<div class="flex items-center gap-4">
+<span class="font-title-md text-title-md text-on-surface">ExlDash</span>
+<span class="text-on-surface-variant/30">|</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 ExlDash Automation. All rights reserved.</p>
+</div>
+<div class="flex gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">Documentation</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">Security Logs</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-opacity" href="#">API Access</a>
+</div>
+</div>
+</footer>
+</main>
+</div>
+<!-- Interactions Script -->
+<script>
+    // Preview interaction
+    const toggleSidebar = document.getElementById('toggle-sidebar');
+    const previewAd = document.getElementById('preview-sidebar-ad');
+    const saveBtn = document.getElementById('save-btn');
+    const successToast = document.getElementById('success-toast');
+
+    toggleSidebar.addEventListener('change', (e) => {
+        if(e.target.checked) {
+            previewAd.classList.remove('opacity-0', 'scale-95');
+            previewAd.classList.add('opacity-100', 'scale-100');
+        } else {
+            previewAd.classList.add('opacity-0', 'scale-95');
+            previewAd.classList.remove('opacity-100', 'scale-100');
+        }
+    });
+
+    saveBtn.addEventListener('click', () => {
+        successToast.classList.remove('hidden');
+        saveBtn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">refresh</span> Processing...';
+        
+        setTimeout(() => {
+            saveBtn.innerHTML = '<span class="material-symbols-outlined text-sm">save</span> Save Ad Configurations';
+            setTimeout(() => {
+                successToast.classList.add('hidden');
+            }, 3000);
+        }, 1200);
+    });
+
+    // Glass panel subtle mouse follow (as requested from previous context)
+    document.querySelectorAll('.glass-panel').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+</script>
+</body></html>
